@@ -29,6 +29,13 @@ class BloomFilter:
         for hash_value in self._computeHashes(item):
             self.filter[hash_value] = 1
 
+    def query(self, item):
+        for hash_value in self._computeHashes(item):
+            if self.filter[hash_value] == 0: 
+                return False
+
+        return True
+
     def _computeHashes(self, data):
         hash_values = []
 
