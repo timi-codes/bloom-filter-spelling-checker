@@ -17,5 +17,5 @@ def fvn_1a(data):
     return hash
 
 
-hash = fvn_1a(b"Spell Checker")
-print("Hash value:", hex(hash))
+# hash = fvn_1a(b"Spell Checker")
+# print("Hash value:", hex(hash))
