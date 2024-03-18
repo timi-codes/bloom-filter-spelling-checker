@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Check if the build or check option is provided
+if [ "$1" != "-build" ] && [ "$1" != "-check" ]; then
+    echo "Usage: spellcheck < -build | -check > <dictionary_file> [-fp <false_positive_rate>]"
+    exit 1
+fi
+
+# Check if the dictionary file is provided
+if [ -z "$2" ]; then
+    echo "Error: Missing dictionary file"
+    echo "Usage: spellcheck -build <dictionary_file> [-fp <false_positive_rate>]"
+    exit 1
+fi
+
+FALSE_POSITIVE_RATE=0.01
+DICTIONARY_FILE=$2
+
+# Check if the -fp option is provided
+if [ "$3" = "-fp" ]; then
+    # Extract the false positive rate
+    FALSE_POSITIVE_RATE=$4
+fi
+
+OUTPUT_FILE="words.bf"
+
+# Build the Bloom filter from the dictionary file
+python3 -m bloom_filter -build "$2" "$FALSE_POSITIVE_RATE" > "$OUTPUT_FILE"
+
+# Uncomment the line below if you want to display a message
+# echo "Bloom filter built and saved to $OUTPUT_FILE"

@@ -1,5 +1,5 @@
 import math
-from hash_fn import fvn_1a
+from bloom_filter.hash_fn import fvn_1a
 
 def _calculate_optimal_m_k(n, p):
     # https://en.wikipedia.org/wiki/Bloom_filter

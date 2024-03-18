@@ -1,5 +1,5 @@
 import unittest
-from bloom_filter import BloomFilter, _calculate_optimal_m_k
+from bloom_filter.bloom_filter_obj import BloomFilter, _calculate_optimal_m_k
 from types import SimpleNamespace
 
 test_dict = {
