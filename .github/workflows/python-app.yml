@@ -25,5 +25,4 @@ jobs:
         python-version: "3.10"
     - name: Test with unittest
       run: |
-        cd request_handler
         python -m unittest discover -s ./test  -p 'test_*.py'
