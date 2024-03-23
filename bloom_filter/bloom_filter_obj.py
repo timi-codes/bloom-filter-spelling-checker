@@ -1,13 +1,6 @@
 import math
 from bloom_filter.hash_fn import fvn_1a
 
-def _calculate_optimal_m_k(n, p):
-    # https://en.wikipedia.org/wiki/Bloom_filter
-    m = - (n * math.log(p)) / (math.log(2) ** 2)
-    k = (m / n) * math.log(2)
-    return int(math.ceil(m)), int(math.ceil(k))
-
-
 class BloomFilter:
     """
     filter: a bit array with all bits to zero.
@@ -22,14 +15,18 @@ class BloomFilter:
     itemSize = None
     numOfHashFns = 1
 
-    def __init__(self, n, fp):
+    def __init__(self, n = None, fp = 0.01):
         self.capacity = n
         self.fp = fp
-        self.itemSize, self.numOfHashFns = _calculate_optimal_m_k(n, fp)
-        self.filter = [0] * self.itemSize
+
+        if n is not None:
+            self.itemSize, self.numOfHashFns = self.calculate_optimal_m_k(n, fp)
+            self.filter = [0] * self.itemSize
 
     def insert(self, item):
-        #Insert items by applying the hash functions and setting the corresponding bits to 1
+        """
+            Insert items by applying the hash functions and setting the corresponding bits to 1
+        """
         for hash_value in self._computeHashes(item):
             self.filter[hash_value] = 1
 
@@ -51,3 +48,19 @@ class BloomFilter:
             hash_values.append(hash % self.itemSize)
 
         return hash_values
+    
+
+    @classmethod
+    def from_bytes(cls, bytes_data, num_hash_fns, bit_size):
+        bf = cls()
+        bf.filter = list(bytes_data)
+        bf.numOfHashFns = num_hash_fns
+        bf.itemSize = bit_size
+        return bf
+    
+    @classmethod
+    def calculate_optimal_m_k(cls, n, p):
+        # https://en.wikipedia.org/wiki/Bloom_filter
+        m = - (n * math.log(p)) / (math.log(2) ** 2)
+        k = (m / n) * math.log(2)
+        return int(math.ceil(m)), int(math.ceil(k))

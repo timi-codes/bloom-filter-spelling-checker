@@ -1,5 +1,5 @@
 import unittest
-from bloom_filter.bloom_filter_obj import BloomFilter, _calculate_optimal_m_k
+from bloom_filter.bloom_filter_obj import BloomFilter
 from types import SimpleNamespace
 
 test_dict = {
@@ -22,7 +22,7 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(len(self.bf.filter), test_params.bitsPerElement, "filter length is not equal to the expected size")
 
     def test_optimal_m_k(self):
-        m, k = _calculate_optimal_m_k(test_params.capacity, test_params.fp)
+        m, k = BloomFilter.calculate_optimal_m_k(test_params.capacity, test_params.fp)
         self.assertEqual(m, test_params.bitsPerElement,"No of bits per element is not equal")
         self.assertEqual(k, test_params.numOfHashFns, "No of hash functions is not equal")
 

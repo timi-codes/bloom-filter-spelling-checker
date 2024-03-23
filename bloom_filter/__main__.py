@@ -15,9 +15,9 @@ def build_bloom_filter_from_file(file_path, false_positive_rate):
         bloom_filter.insert(word)
     return bloom_filter
 
-def load_bloom_filter(file_path):
+def load_bloom_filter_from_file(file_path):
     with open(file_path, "rb") as file:
-        header = file.read(8)  # Assuming header size is 8 bytes
+        header = file.read(12)
 
         # Validate file type and version
         file_type, version, num_hash_fns, filter_length = struct.unpack('>4sHHI', header)
@@ -25,11 +25,21 @@ def load_bloom_filter(file_path):
             raise ValueError("Invalid file type or version")
 
         filter_bytes = file.read(filter_length)
-        return filter_bytes
+        bloom_filter = BloomFilter.from_bytes(
+            filter_bytes, num_hash_fns, filter_length)
+        return bloom_filter
 
 
-def check_spelling():
-    filter_bytes = load_bloom_filter("words.bf")
+def check_spelling(words):
+    bf = load_bloom_filter_from_file("./words.bf")
+    wrong_spellings = []
+
+    for word in words:
+        is_correct = bf.query(word)
+        if not is_correct:
+            wrong_spellings.append(word)
+
+    return f"These words are spelt wrong:\n {'\n '.join(wrong_spellings)}"
 
 
 if __name__ == "__main__":
@@ -41,17 +51,16 @@ if __name__ == "__main__":
         false_positive_rate = float(sys.argv[3])
 
         bf = build_bloom_filter_from_file(dictionary_file, false_positive_rate)
-
-        header = struct.pack('>4sHHI', b'CCBF', 1, bf.numOfHashFns, len(bf.filter))
-        
+        header = struct.pack('>4sHHI', b'CCBF', 1, bf.numOfHashFns, bf.itemSize)
         filter_bytes = bytes(bf.filter)
+        
         with open(output_file, 'wb') as file:
             file.write(header)
             file.write(filter_bytes)
 
     elif sys.argv[1] == "-check":
         words = sys.argv[2:]
-        print(words)
+        print(check_spelling(words))
 
 
 
