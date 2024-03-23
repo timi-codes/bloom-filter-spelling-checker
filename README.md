@@ -1,5 +1,4 @@
 ## Bloom Filter Spelling Checker
-### Coding Challenge #53:
 [The challenge](https://codingchallenges.substack.com/p/coding-challenge-53-bloom-filter) is to build a lightweight spelling checker by leveraging bloom filter without having to filter through a dictionary file (dict.txt), thus minimizing disk and memory usage.
 
 
@@ -9,34 +8,33 @@
 ### Build Bloom Filter from Dictionary
 ```bloom_filter/__main__.py``` contains `build_bloom_filter_from_file` helper for loading words in the dictionary into the bloom filter. The filter called `words.bf` is then generated and saved in the root directory.
 
-    Usage: ```spellcheck < -build > <dictionary_file> [-fp <false_positive_rate>]```
-
-    ```shell
-        ./spellcheck -build dict.txt -fp 0.01
+- **Usage**: ```spellcheck < -build > <dictionary_file> [-fp <false_positive_rate>]```
+    ```bash
+    ./spellcheck -build dict.txt -fp 0.01
     ```
 
-*Output*: 
-```
+- **Output**: 
+    ```
     Bloom filter built and saved to words.bf
-```
+    ```
 
 ### Check Spelling
-The `words.bf` is loaded and the Bloom Filter Class is reconstructed and we can use our `query()` function to check if a word exist in the bloom filter
+The `words.bf` is loaded and the Bloom Filter Class is reconstructed and we can use our `query(self, item)` function to check if a word exist in the bloom filter
 
-- Usage ```spellcheck < -check > <words>```
+- **Usage** ```spellcheck < -check > <words>```
     ```bash
-        ./spellcheck -check This erro can be an isue with my real mothers tongu
+    ./spellcheck -check  The challege is to build your own micro spel cecker that can determeane if a word is probably spelt correcly 
     ```
 
-*Output*: 
-```
-These words are spelt wrong:
- This
- erro
- isue
- mothers
- tongu
-```
+- **Output**: 
+    ```
+    These words are spelt wrong:
+    challege
+    spel
+    cecker
+    determeane
+    correcly
+    ```
 
 
 ### References
