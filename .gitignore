@@ -1,1 +1,2 @@
-__pycache__
+__pycache__/
+bloom_filter/__pycache__/

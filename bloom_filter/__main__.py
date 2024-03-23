@@ -1,5 +1,5 @@
 import sys
-from bloom_filter.bloom_filter_obj import BloomFilter
+from bloom_filter import BloomFilter
 import struct
 
 
@@ -25,10 +25,8 @@ def load_bloom_filter_from_file(file_path):
             raise ValueError("Invalid file type or version")
 
         filter_bytes = file.read(filter_length)
-        bloom_filter = BloomFilter.from_bytes(
-            filter_bytes, num_hash_fns, filter_length)
+        bloom_filter = BloomFilter.from_bytes(filter_bytes, num_hash_fns, filter_length)
         return bloom_filter
-
 
 def check_spelling(words):
     bf = load_bloom_filter_from_file("./words.bf")
@@ -51,7 +49,7 @@ if __name__ == "__main__":
         false_positive_rate = float(sys.argv[3])
 
         bf = build_bloom_filter_from_file(dictionary_file, false_positive_rate)
-        header = struct.pack('>4sHHI', b'CCBF', 1, bf.numOfHashFns, bf.itemSize)
+        header = struct.pack('>4sHHI', b'CCBF', 1, bf.num_hash_fns, len(bf.filter))
         filter_bytes = bytes(bf.filter)
         
         with open(output_file, 'wb') as file:

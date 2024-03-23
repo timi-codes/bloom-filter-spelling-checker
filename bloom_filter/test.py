@@ -1,12 +1,12 @@
 import unittest
-from bloom_filter.bloom_filter_obj import BloomFilter
+from bloom_filter import BloomFilter
 from types import SimpleNamespace
 
 test_dict = {
     "capacity": 235976, # This is the total number of words in dict.txt
     "fp": 0.01,
-    "bitsPerElement": 2261844,
-    "numOfHashFns": 7
+    "bits_per_element": 2261844,
+    "num_hash_fns": 7
 }
 test_params = SimpleNamespace(**test_dict)
 
@@ -17,26 +17,26 @@ class TestApplication(unittest.TestCase):
     def test_init(self):
         self.assertEqual(self.bf.capacity, test_params.capacity, "Capacity wasn't properly set")
         self.assertEqual(self.bf.fp, test_params.fp,"False positive is wrongly set")
-        self.assertIsNotNone(self.bf.itemSize, "False positive is wrongly set")
-        self.assertGreater(self.bf.numOfHashFns, 1, "Hash functions is invalid")
-        self.assertEqual(len(self.bf.filter), test_params.bitsPerElement, "filter length is not equal to the expected size")
+        self.assertIsNotNone(self.bf.bits_size, "False positive is wrongly set")
+        self.assertGreater(self.bf.num_hash_fns, 1, "Hash functions is invalid")
+        self.assertEqual(len(self.bf.filter), test_params.bits_per_element, "filter length is not equal to the expected size")
 
     def test_optimal_m_k(self):
         m, k = BloomFilter.calculate_optimal_m_k(test_params.capacity, test_params.fp)
-        self.assertEqual(m, test_params.bitsPerElement,"No of bits per element is not equal")
-        self.assertEqual(k, test_params.numOfHashFns, "No of hash functions is not equal")
+        self.assertEqual(m, test_params.bits_per_element, "No of bits per element is not equal")
+        self.assertEqual(k, test_params.num_hash_fns, "No of hash functions is not equal")
 
 
     def test_computeHashes(self):
-        hashValues = self.bf._computeHashes("RED")
+        hashValues = self.bf.compute_hashes("RED")
 
-        self.assertEqual(len(hashValues), test_params.numOfHashFns, "No of hash functions is not equal")
+        self.assertEqual(len(hashValues), test_params.num_hash_fns, "No of hash functions is not equal")
 
     def test_insert(self):
         item = "RED"
         self.bf.insert(item)
 
-        for hash_value in self.bf._computeHashes(item):
+        for hash_value in self.bf.compute_hashes(item):
             self.assertEqual(self.bf.filter[hash_value], 1, f"Bit at index {hash_value} should be set to 1 after inserting the item")
 
     def test_query_postive(self):
