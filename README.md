@@ -23,12 +23,7 @@
 ### Check Spelling
 The `words.bf` is loaded and the Bloom Filter Class is reconstructed and we can use our `query()` function to check if a word exist in the bloom filter
 
-- Usage 
-
-    ```bash
-        spellcheck < -check > <words>
-    ```
-
+- Usage ```spellcheck < -check > <words>```
     ```bash
         ./spellcheck -check This erro can be an isue with my real mothers tongu
     ```
