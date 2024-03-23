@@ -9,7 +9,7 @@ fi
 # Check if the dictionary file is provided
 if [ -z "$2" ]; then
     echo "Error: Missing dictionary file"
-    echo "Usage: spellcheck -build <dictionary_file> [-fp <false_positive_rate>]"
+    echo "Usage: spellcheck < -build | -check > <dictionary_file> [-fp <false_positive_rate>]"
     exit 1
 fi
 
@@ -24,8 +24,14 @@ fi
 
 OUTPUT_FILE="words.bf"
 
-# Build the Bloom filter from the dictionary file
-python3 -m bloom_filter -build "$2" "$FALSE_POSITIVE_RATE" > "$OUTPUT_FILE"
 
-# Uncomment the line below if you want to display a message
-# echo "Bloom filter built and saved to $OUTPUT_FILE"
+if [ "$1" = "-build" ]; then
+    # Build the Bloom filter from the dictionary file
+    python3 -m bloom_filter "$1" "$2" "$FALSE_POSITIVE_RATE" > "$OUTPUT_FILE"
+    echo "Bloom filter built and saved to $OUTPUT_FILE"
+fi
+
+if [ "$1" = "-check" ]; then
+    # Check correct spelling from bloom filter
+    python3 -m bloom_filter "$1" "${@:2}"
+fi

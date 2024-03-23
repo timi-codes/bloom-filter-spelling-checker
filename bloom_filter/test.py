@@ -3,7 +3,7 @@ from bloom_filter.bloom_filter_obj import BloomFilter, _calculate_optimal_m_k
 from types import SimpleNamespace
 
 test_dict = {
-    "capacity": 235976, # This is th total number of words in dict.txt
+    "capacity": 235976, # This is the total number of words in dict.txt
     "fp": 0.01,
     "bitsPerElement": 2261844,
     "numOfHashFns": 7
